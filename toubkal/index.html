@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toubkal — Roof of Africa</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='32,4 60,56 4,56' fill='%23c0392b' opacity='0.9'/%3E%3Cpolygon points='32,18 52,56 12,56' fill='%23ecf0f1' opacity='0.6'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#1a0a00">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Crimson+Pro:wght@300;400;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --stone:    #1a0a00;
+      --earth:    #2c1810;
+      --clay:     #8b4513;
+      --sand:     #c9a96e;
+      --gold:     #d4a853;
+      --ice:      #e8f4f8;
+      --snow:     #f5f0eb;
+      --rust:     #c0392b;
+      --sky:      #7fb3d3;
+      --mist:     rgba(200,220,235,0.15);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--stone);
+      color: var(--snow);
+      font-family: 'Crimson Pro', Georgia, serif;
+      overflow-x: hidden;
+      cursor: none;
+     
+    }
+
+    /* CUSTOM CURSOR */
+    .cursor {
+      position: fixed; top: 0; left: 0;
+      width: 12px; height: 12px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+      mix-blend-mode: difference;
+    }
+    .cursor.big { width: 40px; height: 40px; background: var(--sand); }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--stone); }
+    ::-webkit-scrollbar-thumb { background: var(--clay); border-radius: 3px; }
+
+    /* ===================== NAV ===================== */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      padding: 20px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      mix-blend-mode: normal;
+      transition: background 0.4s, padding 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(26,10,0,0.95);
+      backdrop-filter: blur(16px);
+      padding: 14px 60px;
+      border-bottom: 1px solid rgba(212,168,83,0.2);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem; letter-spacing: 5px;
+      color: var(--gold);
+    }
+    .nav-logo span { color: var(--snow); }
+
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a {
+      color: rgba(245,240,235,0.7); text-decoration: none;
+      font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase;
+      font-family: 'Crimson Pro', serif; font-weight: 600;
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 1px; background: var(--gold);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ===================== HERO ===================== */
+    .hero {
+      height: 100vh; min-height: 700px;
+      position: relative; overflow: hidden;
+      display: flex; align-items: flex-end;
+    }
+
+    /* SVG mountain landscape */
+    .hero-mountain {
+      position: absolute; inset: 0;
+      z-index: 0;
+    }
+
+    /* Sky gradient */
+    .hero-mountain::before {
+      content: '';
+      position: absolute; inset: 0;
+     background-image: url('wa2.jpeg ');
+     
+    }
+
+    /* Stars */
+    .stars {
+      position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      overflow: hidden; z-index: 1;
+    }
+    .star {
+      position: absolute; border-radius: 50%;
+      background: white; animation: twinkle 3s infinite;
+    }
+    @keyframes twinkle { 0%,100%{opacity:0.9} 50%{opacity:0.2} }
+
+    /* Mountain SVG */
+    .mountain-svg {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      z-index: 2; width: 100%;
+    }
+
+    .hero-content {
+      position: relative; z-index: 10;
+      width: 100%; padding: 0 80px 120px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+
+    .hero-left { max-width: 600px; }
+
+    .hero-eyebrow {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem; letter-spacing: 6px;
+      color: var(--gold); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-eyebrow::before {
+      content: ''; width: 40px; height: 1px; background: var(--gold);
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4rem, 8vw, 8rem);
+      font-weight: 900; line-height: 0.9;
+      color: var(--snow);
+    }
+    .hero-title em {
+      font-style: italic; color: var(--gold);
+      display: block;
+    }
+
+    .hero-subtitle {
+      margin-top: 24px;
+      font-size: 1.2rem; color: rgba(245,240,235,0.7);
+      font-weight: 300; line-height: 1.7; max-width: 420px;
+    }
+
+    .hero-stats {
+      display: flex; gap: 40px; margin-top: 40px;
+    }
+   
+    .hero-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem; color: var(--gold); line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(245,240,235,0.5); margin-top: 4px;
+    }
+
+    .hero-right {
+      text-align: right;
+    }
+    .hero-badge {
+      display: inline-flex; flex-direction: column; align-items: center;
+      border: 1px solid rgba(212,168,83,0.4);
+      padding: 20px 28px; gap: 4px;
+      backdrop-filter: blur(8px);
+      background: rgba(26,10,0,0.4);
+    }
+    .badge-flag { font-size: 2rem; }
+    .badge-country {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 4px; font-size: 0.85rem; color: var(--gold);
+    }
+    .badge-rank {
+      font-size: 0.7rem; color: rgba(245,240,235,0.5);
+      letter-spacing: 2px; text-transform: uppercase;
+    }
+
+    .scroll-hint {
+      position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+      z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 8px;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    .scroll-hint span { font-size: 0.65rem; letter-spacing: 4px; color: rgba(245,240,235,0.4); text-transform: uppercase; }
+    .scroll-arrow { width: 1px; height: 50px; background: linear-gradient(var(--gold), transparent); }
+    @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+    /* ===================== SECTIONS ===================== */
+    .section { padding: 120px 80px; max-width: 1400px; margin: 0 auto; }
+    .section-full { padding: 120px 80px; }
+
+    .section-tag {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.8rem; letter-spacing: 6px; color: var(--gold);
+      display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
+    }
+    .section-tag::before { content: ''; width: 30px; height: 1px; background: var(--gold); }
+
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 700; line-height: 1.1;
+      color: var(--snow);
+    }
+    .section-heading em { font-style: italic; color: var(--gold); }
+
+    /* ===================== ABOUT ===================== */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center; margin-top: 60px;
+    }
+
+    .about-text p {
+      font-size: 1.15rem; line-height: 1.9;
+      color: rgba(245,240,235,0.75);
+      margin-bottom: 20px; font-weight: 300;
+    }
+    .about-text p strong { color: var(--sand); font-weight: 600; }
+
+    .about-visual {
+      position: relative;
+    }
+    .about-card {
+      background: var(--earth);
+      border: 1px solid rgba(212,168,83,0.15);
+      padding: 50px 40px;
+      position: relative; overflow: hidden;
+    }
+    .about-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--rust), transparent);
+    }
+    .about-card-big {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 7rem; color: rgba(212,168,83,0.08);
+      position: absolute; bottom: -20px; right: 20px; line-height: 1;
+      pointer-events: none;
+    }
+    .facts-list { list-style: none; }
+    .facts-list li {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 16px 0; border-bottom: 1px solid rgba(212,168,83,0.1);
+      font-size: 1rem; color: rgba(245,240,235,0.75);
+    }
+    .facts-list li:last-child { border-bottom: none; }
+    .fact-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+    .fact-label { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 3px; }
+
+    /* ===================== ROUTES ===================== */
+    .routes-section { background: var(--earth); }
+
+    .routes-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2px; margin-top: 60px;
+    }
+
+    .route-card {
+      background: var(--stone);
+      padding: 48px 36px;
+      position: relative; overflow: hidden;
+      transition: background 0.4s;
+      cursor: pointer;
+    }
+    .route-card:hover { background: #220d00; }
+    .route-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+      background: var(--clay);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s;
+    }
+    .route-card:hover::after { transform: scaleX(1); }
+
+    .route-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem; color: rgba(212,168,83,0.07);
+      line-height: 1; margin-bottom: 20px;
+    }
+    .route-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 700;
+      color: var(--snow); margin-bottom: 12px;
+    }
+    .route-desc {
+      font-size: 1rem; color: rgba(245,240,235,0.55);
+      line-height: 1.7; margin-bottom: 24px; font-weight: 300;
+    }
+    .route-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge {
+      padding: 4px 12px; font-size: 0.7rem; letter-spacing: 2px;
+      text-transform: uppercase; border: 1px solid;
+      font-family: 'Crimson Pro', serif; font-weight: 600;
+    }
+    .badge-hard { border-color: var(--rust); color: var(--rust); }
+    .badge-medium { border-color: var(--gold); color: var(--gold); }
+    .badge-easy { border-color: var(--sky); color: var(--sky); }
+    .badge-days { border-color: rgba(245,240,235,0.2); color: rgba(245,240,235,0.5); }
+
+    /* ===================== GALLERY / MOSAIC ===================== */
+    .mosaic {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(3, 180px);
+      gap: 4px;
+    }
+
+    .mosaic-cell {
+      background: var(--earth);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+      transition: filter 0.3s;
+    }
+    .mosaic-cell:hover { filter: brightness(1.2); }
+    .mosaic-cell .cell-emoji { font-size: 3.5rem; opacity: 0.6; transition: opacity 0.3s, transform 0.3s; }
+    .mosaic-cell:hover .cell-emoji { opacity: 1; transform: scale(1.1); }
+
+    .mosaic-cell:nth-child(1) { grid-column: span 3; grid-row: span 2; background: linear-gradient(135deg, #1a3550, #0d1b2a); }
+    .mosaic-cell:nth-child(2) { grid-column: span 2; background: linear-gradient(135deg, #2c1810, #8b4513); }
+    .mosaic-cell:nth-child(3) { grid-column: span 1; background: linear-gradient(135deg, #1a0a00, #2c1810); }
+    .mosaic-cell:nth-child(4) { grid-column: span 1; background: linear-gradient(135deg, #0d1b2a, #1a3550); }
+    .mosaic-cell:nth-child(5) { grid-column: span 2; background: linear-gradient(135deg, #8b4513, #c9a96e); }
+    .mosaic-cell:nth-child(6) { grid-column: span 2; grid-row: span 2; background: linear-gradient(135deg, #2d5f8a, #7fb3d3); }
+    .mosaic-cell:nth-child(7) { grid-column: span 2; background: linear-gradient(135deg, #3d2010, #8b4513); }
+    .mosaic-cell:nth-child(8) { grid-column: span 2; background: linear-gradient(135deg, #1a0a00, #c0392b); }
+
+    .mosaic-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20px; font-size: 0.75rem; letter-spacing: 2px;
+      text-transform: uppercase; color: rgba(245,240,235,0.6);
+      background: linear-gradient(transparent, rgba(0,0,0,0.6));
+      font-family: 'Crimson Pro', serif;
+    }
+
+    /* ===================== SEASONS ===================== */
+    .seasons-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 2px; margin-top: 60px;
+    }
+
+    .season-card {
+      padding: 50px 30px;
+      position: relative; overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .season-card:hover { transform: translateY(-4px); }
+
+    .season-card:nth-child(1) { background: linear-gradient(160deg, #0d1b2a, #1a3550); }
+    .season-card:nth-child(2) { background: linear-gradient(160deg, #1a4a20, #2d6e35); }
+    .season-card:nth-child(3) { background: linear-gradient(160deg, #4a2000, #8b4513); }
+    .season-card:nth-child(4) { background: linear-gradient(160deg, #1a2a3a, #2c4a6e); }
+
+    .season-icon { font-size: 3rem; display: block; margin-bottom: 20px; }
+    .season-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem; letter-spacing: 4px; color: var(--snow);
+      margin-bottom: 10px;
+    }
+    .season-temp {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem; font-weight: 700; color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .season-desc {
+      font-size: 0.9rem; color: rgba(245,240,235,0.6);
+      line-height: 1.7; font-weight: 300;
+    }
+    .season-rec {
+      margin-top: 20px;
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+      border: 1px solid rgba(245,240,235,0.2); color: rgba(245,240,235,0.5);
+    }
+    .rec-best { border-color: var(--gold); color: var(--gold); }
+
+    /* ===================== PREPARATION ===================== */
+    .prep-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 40px; margin-top: 60px;
+    }
+
+    .prep-item {
+      display: flex; gap: 24px; align-items: flex-start;
+      padding: 30px;
+      border: 1px solid rgba(212,168,83,0.1);
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .prep-item:hover { border-color: rgba(212,168,83,0.3); background: var(--earth); }
+
+    .prep-icon-wrap {
+      width: 56px; height: 56px; flex-shrink: 0;
+      background: rgba(212,168,83,0.08);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+    }
+    .prep-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: var(--sand); margin-bottom: 8px;
+    }
+    .prep-text {
+      font-size: 0.95rem; color: rgba(245,240,235,0.6);
+      line-height: 1.7; font-weight: 300;
+    }
+
+    /* ===================== QUOTE ===================== */
+    .quote-section {
+      background: linear-gradient(135deg, var(--earth), var(--stone));
+      border-top: 1px solid rgba(212,168,83,0.15);
+      border-bottom: 1px solid rgba(212,168,83,0.15);
+      text-align: center; padding: 100px 80px;
+    }
+    blockquote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-style: italic; font-weight: 400;
+      color: var(--snow); line-height: 1.4; max-width: 900px; margin: 0 auto;
+    }
+    blockquote::before { content: '"'; color: var(--gold); font-size: 6rem; line-height: 0; vertical-align: -0.4em; margin-right: 10px; }
+    cite {
+      display: block; margin-top: 30px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.85rem; letter-spacing: 4px;
+      color: var(--gold); font-style: normal;
+    }
+
+    /* ===================== CTA ===================== */
+    .cta-section {
+      text-align: center; padding: 120px 80px;
+      background: var(--stone);
+      position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: 'TOUBKAL';
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20vw; color: rgba(212,168,83,0.03);
+      white-space: nowrap; pointer-events: none;
+    }
+
+    .cta-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      font-weight: 900; color: var(--snow);
+      line-height: 1.1; margin-bottom: 20px;
+    }
+    .cta-section h2 span { color: var(--gold); font-style: italic; }
+    .cta-section p {
+      font-size: 1.15rem; color: rgba(245,240,235,0.6);
+      max-width: 500px; margin: 0 auto 40px; font-weight: 300; line-height: 1.7;
+    }
+
+    .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-gold {
+      padding: 16px 48px;
+      background: var(--gold); color: var(--stone);
+      font-family: 'Crimson Pro', serif; font-weight: 700;
+      font-size: 1rem; letter-spacing: 2px; text-transform: uppercase;
+      border: none; cursor: pointer; text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+    .btn-gold:hover { background: var(--sand); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(212,168,83,0.25); }
+    .btn-outline {
+      padding: 16px 48px;
+      background: transparent; color: var(--snow);
+      font-family: 'Crimson Pro', serif; font-weight: 600;
+      font-size: 1rem; letter-spacing: 2px; text-transform: uppercase;
+      border: 1px solid rgba(245,240,235,0.3); cursor: pointer; text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-3px); }
+
+    /* ===================== FOOTER ===================== */
+    footer {
+      background: var(--earth);
+      border-top: 1px solid rgba(212,168,83,0.1);
+      padding: 60px 80px 40px;
+      display: grid; grid-template-columns: 2fr 1fr 1fr;
+      gap: 60px;
+    }
+
+    .footer-brand {}
+    .footer-logo-txt {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem; letter-spacing: 6px; color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .footer-tagline {
+      font-size: 1rem; color: rgba(245,240,235,0.4);
+      font-weight: 300; line-height: 1.7; max-width: 280px;
+    }
+    .footer-col h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 4px; font-size: 0.85rem; color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a {
+      color: rgba(245,240,235,0.4); text-decoration: none;
+      font-size: 0.9rem; transition: color 0.3s;
+    }
+    .footer-col ul li a:hover { color: var(--sand); }
+    .footer-bottom {
+      grid-column: span 3;
+      border-top: 1px solid rgba(212,168,83,0.1);
+      padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-bottom p { font-size: 0.8rem; color: rgba(245,240,235,0.2); letter-spacing: 1px; }
+
+    /* ===================== ELEVATION BAR ===================== */
+    .elev-section {
+      padding: 80px;
+      background: var(--earth);
+    }
+    .elev-container { max-width: 1200px; margin: 0 auto; }
+    .elev-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; color: var(--gold); margin-bottom: 30px; font-style: italic;
+    }
+    .peaks { display: flex; flex-direction: column; gap: 16px; }
+    .peak-row { display: flex; align-items: center; gap: 20px; }
+    .peak-name { width: 220px; font-size: 0.85rem; letter-spacing: 1px; color: rgba(245,240,235,0.6); text-align: right; flex-shrink: 0; }
+    .peak-name strong { color: var(--snow); display: block; font-weight: 600; }
+    .peak-bar-wrap { flex: 1; height: 10px; background: rgba(255,255,255,0.05); position: relative; }
+    .peak-bar {
+      height: 100%; background: linear-gradient(90deg, var(--clay), var(--gold));
+      transform-origin: left; animation: growBar 1.5s ease forwards;
+      transform: scaleX(0);
+    }
+    @keyframes growBar { to { transform: scaleX(1); } }
+    .peak-elev { width: 80px; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--gold); flex-shrink: 0; }
+    .peak-row.highlight .peak-name strong { color: var(--gold); font-size: 1rem; }
+    .peak-row.highlight .peak-bar { background: linear-gradient(90deg, var(--rust), var(--gold)); }
+    .peak-row.highlight .peak-bar-wrap { height: 14px; }
+
+    /* REVEAL ANIMATION */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hero-content { padding: 0 24px 80px; flex-direction: column; align-items: flex-start; gap: 30px; }
+      .section { padding: 80px 24px; }
+      .section-full { padding: 80px 24px; }
+      .about-grid, .prep-grid { grid-template-columns: 1fr; }
+      .routes-grid, .seasons-grid { grid-template-columns: 1fr; }
+      .mosaic { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
+      .mosaic-cell { grid-column: span 1 !important; grid-row: span 1 !important; height: 160px; }
+      footer { grid-template-columns: 1fr; padding: 40px 24px; }
+      .footer-bottom { grid-column: 1; flex-direction: column; gap: 10px; text-align: center; }
+      .elev-section { padding: 60px 24px; }
+      .peak-name { width: 140px; }
+      .quote-section { padding: 60px 24px; }
+      .cta-section { padding: 80px 24px; }
+    }
+
+   
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">TOUB<span>KAL</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#routes">Routes</a></li>
+    <li><a href="#seasons">Seasons</a></li>
+    <li><a href="#prepare">Prepare</a></li>
+    <li><a href="#summit">Summit</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-mountain">
+    <!-- Stars -->
+    <div class="stars" id="stars"></div>
+
+    <!-- SVG Mountain Scene -->
+    <svg class="mountain-svg" viewBox="0 0 1440 500" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg">
+      <!-- Far mountains -->
+     
+      
+      
+      
+     
+      <!-- Ground -->
+     
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Roof of Africa</div>
+      <h1 class="hero-title">
+        Mount<br><em>Toubkal</em>
+      </h1>
+      <p class="hero-subtitle">
+        At 4,167 metres, the highest peak of the Atlas Mountains and all of North Africa awaits those bold enough to ascend.
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">4,167</div>
+          <div class="hero-stat-label">Metres High</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">2</div>
+          <div class="hero-stat-label">Days to Summit</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">#1</div>
+          <div class="hero-stat-label">North Africa</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-badge">
+        <span class="badge-flag">🇲🇦</span>
+        <span class="badge-country">Morocco</span>
+        <span class="badge-rank">High Atlas Mountains</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-tag reveal">The Mountain</div>
+  <h2 class="section-heading reveal">A <em>Legend</em> of<br>the Atlas</h2>
+
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>
+        <strong>Jbel Toubkal</strong> rises majestically from the heart of Morocco's High Atlas range, a two-hour drive south of Marrakech. Its name, believed to derive from the Tamazight for <strong>"land of the highest mountains"</strong>, is fitting for a peak that has humbled adventurers and inspired Berber shepherds for centuries.
+      </p>
+      <p>
+        Unlike many of the world's great summits, Toubkal demands no technical climbing expertise — yet it generously rewards every step with <strong>sweeping panoramas</strong> across Morocco, Algeria, and on clear days, the distant shimmer of the Atlantic and Mediterranean.
+      </p>
+      <p>
+        The trek passes through the <strong>Imlil valley</strong>, ancient Berber villages, and high-altitude refuges that offer a warm welcome in the harshest conditions. It is not merely a climb — it is an encounter with Moroccan culture at its most elemental.
+      </p>
+    </div>
+
+    <div class="about-visual reveal">
+      <div class="about-card">
+        <div class="about-card-big">4167</div>
+        <ul class="facts-list">
+          <li>
+            <span class="fact-icon">⛰️</span>
+            <div>
+              <span class="fact-label">Elevation</span>
+              4,167 m (13,671 ft) above sea level
+            </div>
+          </li>
+          <li>
+            <span class="fact-icon">📍</span>
+            <div>
+              <span class="fact-label">Location</span>
+              Toubkal National Park, High Atlas, Morocco
+            </div>
+          </li>
+          <li>
+            <span class="fact-icon">🧭</span>
+            <div>
+              <span class="fact-label">Coordinates</span>
+              31°03′N 07°54′W
+            </div>
+          </li>
+          <li>
+            <span class="fact-icon">🏔️</span>
+            <div>
+              <span class="fact-label">Mountain Range</span>
+              High Atlas — Highest peak in North Africa
+            </div>
+          </li>
+          <li>
+            <span class="fact-icon">🥾</span>
+            <div>
+              <span class="fact-label">Difficulty</span>
+              Non-technical — Grade F (French scale)
+            </div>
+          </li>
+          <li>
+            <span class="fact-icon">🌡️</span>
+            <div>
+              <span class="fact-label">Summit Temperature</span>
+              -20°C in winter · +5°C in summer
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ELEVATION -->
+<div class="elev-section">
+  <div class="elev-container">
+    <p class="elev-title">Toubkal among the great peaks of Africa</p>
+    <div class="peaks" id="peaks-list"></div>
+  </div>
+</div>
+
+<!-- ROUTES -->
+<section class="section-full routes-section" id="routes">
+  <div class="section" style="padding-bottom:0; padding-top:0;">
+    <div class="section-tag reveal">Ascent Routes</div>
+    <h2 class="section-heading reveal">Choose Your<br><em>Path</em> to the Top</h2>
+  </div>
+  <div class="section" style="padding-top:0;">
+    <div class="routes-grid reveal">
+      <div class="route-card">
+        <div class="route-num">01</div>
+        <div class="route-name">South Cwm Route</div>
+        <p class="route-desc">The classic and most popular ascent, starting from Imlil village. Well-marked trail through the Mizane valley to the Neltner Refuge before the final push to the summit.</p>
+        <div class="route-badges">
+          <span class="badge badge-medium">Moderate</span>
+          <span class="badge badge-days">2 Days</span>
+          <span class="badge badge-days">18 km RT</span>
+        </div>
+      </div>
+      <div class="route-card">
+        <div class="route-num">02</div>
+        <div class="route-name">North Face (Winter)</div>
+        <p class="route-desc">A serious winter mountaineering route requiring crampons and ice axe. Steep snow gullies and exposed ridgelines demand alpine experience and respect for the mountain.</p>
+        <div class="route-badges">
+          <span class="badge badge-hard">Difficult</span>
+          <span class="badge badge-days">3 Days</span>
+          <span class="badge badge-days">Winter Only</span>
+        </div>
+      </div>
+      <div class="route-card">
+        <div class="route-num">03</div>
+        <div class="route-name">Toubkal Circuit</div>
+        <p class="route-desc">A spectacular multi-day loop combining Toubkal summit with the surrounding peaks of Ouanoukrim and Timesguida. For those who want to truly explore the High Atlas.</p>
+        <div class="route-badges">
+          <span class="badge badge-medium">Moderate</span>
+          <span class="badge badge-days">4–5 Days</span>
+          <span class="badge badge-days">50 km</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY MOSAIC -->
+<div class="mosaic reveal" id="gallery">
+  <div class="mosaic-cell">
+    <span class="cell-emoji"><img src="wa2.jpeg" alt=""></span>
+    <div class="mosaic-label">Summit — 4,167 m</div>
+  </div>
+  <div class="mosaic-cell">
+    <span class="cell-emoji"><img src="wa3.jpeg" alt=""></span>
+    <div class="mosaic-label">Imlil Village</div>
+  </div>
+ 
+  <div class="mosaic-cell">
+    <span class="cell-emoji"><img src="wa4.jpeg" alt=""></span>
+    <div class="mosaic-label">Winter Ascent</div>
+  </div>
+  <div class="mosaic-cell">
+    <span class="cell-emoji"><img src="wa5.jpeg" alt=""></span>
+    <div class="mosaic-label">Berber Mule Track</div>
+  </div>
+  <div class="mosaic-cell">
+    <span class="cell-emoji"><img src="wa6.jpeg" alt=""></span>
+    <div class="mosaic-label">Sunrise from Summit</div>
+  </div>
+  <div class="mosaic-cell">
+    <span class="cell-emoji"><img src="wa7.jpeg" alt=""></span>
+    <div class="mosaic-label">Neltner Refuge</div>
+  </div>
+  <div class="mosaic-cell">
+    <span class="cell-emoji"><img src="wa.jpeg" alt=""></span>
+    <div class="mosaic-label">Atlas Eagle</div>
+  </div>
+</div>
+
+<!-- SEASONS -->
+<section class="section" id="seasons">
+  <div class="section-tag reveal">When to Go</div>
+  <h2 class="section-heading reveal">Four <em>Seasons</em>,<br>One Mountain</h2>
+  <div class="seasons-grid reveal">
+    <div class="season-card">
+      <span class="season-icon">❄️</span>
+      <div class="season-name">Winter</div>
+      <div class="season-temp">−20°C</div>
+      <p class="season-desc">Deep snow transforms Toubkal into an alpine adventure requiring crampons and ice axe. Stunning but unforgiving — for experienced mountaineers only.</p>
+      <span class="season-rec">Dec – Feb</span>
+    </div>
+    <div class="season-card">
+      <span class="season-icon">🌸</span>
+      <div class="season-name">Spring</div>
+      <div class="season-temp">+5°C</div>
+      <p class="season-desc">Snow melts reveal wildflowers in the valleys. Trails can be muddy but the mountain is alive and the skies crystal clear. A favourite for photographers.</p>
+      <span class="season-rec rec-best">Best Season</span>
+    </div>
+    <div class="season-card">
+      <span class="season-icon">☀️</span>
+      <div class="season-name">Summer</div>
+      <div class="season-temp">+15°C</div>
+      <p class="season-desc">Peak trekking season. Snow-free trails and long daylight hours. Expect company — the mountain is popular from June to August. Nights still cold.</p>
+      <span class="season-rec rec-best">Most Popular</span>
+    </div>
+    <div class="season-card">
+      <span class="season-icon">🍂</span>
+      <div class="season-name">Autumn</div>
+      <div class="season-temp">−5°C</div>
+      <p class="season-desc">Golden light, fewer crowds and comfortable temperatures make autumn perhaps the most rewarding time to summit. Early snow possible from October.</p>
+      <span class="season-rec rec-best">Recommended</span>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-section reveal">
+  <blockquote>
+    The Atlas is not a barrier between the desert and the sea — it is the place where the sky begins.
+  </blockquote>
+  <cite>— Berber Proverb</cite>
+</div>
+
+<!-- PREPARATION -->
+<section class="section" id="prepare">
+  <div class="section-tag reveal">Get Ready</div>
+  <h2 class="section-heading reveal">Prepare for the<br><em>Ascent</em></h2>
+  <div class="prep-grid reveal">
+    <div class="prep-item">
+      <div class="prep-icon-wrap">🥾</div>
+      <div>
+        <div class="prep-title">Footwear & Gear</div>
+        <p class="prep-text">Sturdy, waterproof hiking boots with ankle support are essential. In winter, crampons and an ice axe are mandatory. Trekking poles significantly ease the descent.</p>
+      </div>
+    </div>
+    <div class="prep-item">
+      <div class="prep-icon-wrap">🧥</div>
+      <div>
+        <div class="prep-title">Layering System</div>
+        <p class="prep-text">Temperatures drop sharply above 3,000 m. A moisture-wicking base layer, insulating mid-layer and windproof shell are non-negotiable, even in summer.</p>
+      </div>
+    </div>
+    <div class="prep-item">
+      <div class="prep-icon-wrap">💧</div>
+      <div>
+        <div class="prep-title">Hydration & Nutrition</div>
+        <p class="prep-text">Carry at least 3 litres of water per day. High-energy snacks, trail mix and dates are ideal. The Neltner Refuge serves hot Moroccan meals and mint tea.</p>
+      </div>
+    </div>
+    <div class="prep-item">
+      <div class="prep-icon-wrap">🫁</div>
+      <div>
+        <div class="prep-title">Altitude Acclimatisation</div>
+        <p class="prep-text">Spend a night at the refuge (3,200 m) before summiting. Move slowly, drink constantly and never ignore headaches — altitude sickness is real above 3,500 m.</p>
+      </div>
+    </div>
+    <div class="prep-item">
+      <div class="prep-icon-wrap">🧭</div>
+      <div>
+        <div class="prep-title">Guide & Permits</div>
+        <p class="prep-text">No permit is required to summit Toubkal. However, hiring a certified local Berber guide is strongly recommended — they know the weather, trails and culture intimately.</p>
+      </div>
+    </div>
+    <div class="prep-item">
+      <div class="prep-icon-wrap">🏥</div>
+      <div>
+        <div class="prep-title">Health & Insurance</div>
+        <p class="prep-text">Ensure your travel insurance covers high-altitude trekking and mountain rescue. Carry a basic first-aid kit. The nearest hospital is in Marrakech, 80 km away.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section" id="summit">
+  <h2 class="reveal">The Summit<br><span>Awaits</span></h2>
+  <p class="reveal">4,167 metres of silence, stars, and horizon. Begin your Toubkal journey from Marrakech — the High Atlas is closer than you think.</p>
+  <div class="cta-btns reveal">
+    <a href="#routes" class="btn-gold">Plan Your Ascent</a>
+    <a href="#prepare" class="btn-outline">Preparation Guide</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo-txt">TOUBKAL</div>
+    <p class="footer-tagline">The roof of Africa. The heart of Morocco. A summit that changes those who reach it.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Explore</h4>
+    <ul>
+      <li><a href="#about">About the Peak</a></li>
+      <li><a href="#routes">Ascent Routes</a></li>
+      <li><a href="#seasons">Best Seasons</a></li>
+      <li><a href="#prepare">Preparation</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Information</h4>
+    <ul>
+      <li><a href="#">Toubkal National Park</a></li>
+      <li><a href="#">Imlil Village</a></li>
+      <li><a href="#">Neltner Refuge</a></li>
+      <li><a href="#">Local Guides</a></li>
+    </ul>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Toubkal — Roof of Africa</p>
+    <p>🇲🇦 High Atlas · Morocco · 4,167 m</p>
+  </div>
+</footer>
+
+<script>
+  // ===== CURSOR =====
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .route-card, .season-card, .prep-item, .mosaic-cell').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+  });
+
+  // ===== STARS =====
+  const starsContainer = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      top:${Math.random() * 100}%;
+      left:${Math.random() * 100}%;
+      animation-delay:${Math.random() * 4}s;
+      animation-duration:${2 + Math.random() * 3}s;
+    `;
+    starsContainer.appendChild(s);
+  }
+
+  // ===== NAVBAR SCROLL =====
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // ===== ELEVATION BARS =====
+  const peaks = [
+    { name: 'Kilimanjaro', country: 'Tanzania', elev: 5895, pct: 100 },
+    { name: 'Mount Kenya', country: 'Kenya', elev: 5199, pct: 88 },
+    { name: 'Rwenzori (Margherita)', country: 'Uganda/DRC', elev: 5109, pct: 86 },
+    { name: 'Ras Dashen', country: 'Ethiopia', elev: 4550, pct: 77 },
+    { name: 'Mount Meru', country: 'Tanzania', elev: 4565, pct: 77 },
+    { name: 'Toubkal ★', country: 'Morocco', elev: 4167, pct: 70, highlight: true },
+    { name: 'Thabana Ntlenyana', country: 'Lesotho', elev: 3482, pct: 59 },
+  ];
+
+  const peaksList = document.getElementById('peaks-list');
+  peaks.forEach(p => {
+    peaksList.innerHTML += `
+      <div class="peak-row ${p.highlight ? 'highlight' : ''}">
+        <div class="peak-name"><strong>${p.name}</strong>${p.country}</div>
+        <div class="peak-bar-wrap">
+          <div class="peak-bar" style="width:${p.pct}%;animation-delay:${0.2}s"></div>
+        </div>
+        <div class="peak-elev">${p.elev.toLocaleString()} m</div>
+      </div>`;
+  });
+
+  // ===== REVEAL ON SCROLL =====
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => observer.observe(r));
+
+  // ===== SMOOTH SCROLL =====
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
